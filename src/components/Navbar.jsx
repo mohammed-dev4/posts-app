@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
+import authContext from "../context/authContext/authContext";
+import { toast } from "react-toastify";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { pathname } = useLocation();
-  console.log(pathname);
-
+  const { token, setToken } = useContext(authContext);
   function toggle() {
     setIsOpen(!isOpen);
   }
+  function logout() {
+    localStorage.removeItem("token");
+    setToken(null);
+    toast.success("Logout successfuly");
+  }
+
   return (
     <>
       <nav className="bg-white w-full  border-b border-gray-300">
@@ -28,21 +35,33 @@ export default function Navbar() {
 
           {/* Btn Actions */}
           <div className="flex md:order-2 space-x-2 rtl:space-x-reverse">
-            {pathname !== "/login" && (
-              <Link
-                to={"/login"}
-                className="border flex justify-center items-center border-blue-600 px-4 py-1 rounded-md bg-blue-600 hover:bg-blue-800 text-white   hover:text-white transition-colors "
+            {token ? (
+              <button
+                onClick={logout}
+                className="border flex justify-center items-center border-red-600 px-4 py-1 rounded-md bg-red-600 hover:bg-red-800 text-white cursor-pointer   hover:text-white transition-colors "
               >
-                Login
-              </Link>
-            )}
-            {pathname !== "/register" && (
-              <Link
-                to={"/register"}
-                className="border flex justify-center items-center border-gray-300 px-4 py-1 rounded-md hover:bg-gray-600 hover:text-white transition-colors "
-              >
-                Register
-              </Link>
+                Logout
+              </button>
+            ) : (
+              <>
+                {pathname !== "/login" && (
+                  <Link
+                    to={"/login"}
+                    className="border flex justify-center items-center border-blue-600 px-4 py-1 rounded-md bg-blue-600 hover:bg-blue-800 text-white   hover:text-white transition-colors "
+                  >
+                    Login
+                  </Link>
+                )}
+
+                {pathname !== "/register" && (
+                  <Link
+                    to={"/register"}
+                    className="border flex justify-center items-center border-gray-300 px-4 py-1 rounded-md hover:bg-gray-600 hover:text-white transition-colors "
+                  >
+                    Register
+                  </Link>
+                )}
+              </>
             )}
 
             <button
@@ -55,29 +74,42 @@ export default function Navbar() {
           </div>
 
           {/* Links List */}
+
           <div
             className={` ${!isOpen && "hidden"} items-center justify-between w-full md:flex md:w-auto md:order-1`}
           >
             <ul className="flex flex-col p-2 border-t border-gray-300 md:p-0 mt-4 font-medium rounded-base bg-neutral-secondary-soft  gap-1.5 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white/40">
-              <li>
-                <NavLink
-                  to="/"
-                  className="  py-1 hover:text-blue-800 font-semibold px-3 md:p-0   transition-colors md:px-2 rounded-md"
-                  aria-current="page"
-                >
-                  Home
-                </NavLink>
-              </li>
-
-              <li>
-                <NavLink
-                  to="/profile"
-                  className="  py-1 hover:text-blue-800 font-semibold px-3 md:p-0   transition-colors md:px-2 rounded-md"
-                  aria-current="page"
-                >
-                  Profile
-                </NavLink>
-              </li>
+              {token && (
+                <>
+                  <li>
+                    <NavLink
+                      to="/"
+                      className="  py-1 hover:text-blue-800 font-semibold px-3 md:p-0   transition-colors md:px-2 rounded-md"
+                      aria-current="page"
+                    >
+                      Home
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="/profile"
+                      className="  py-1 hover:text-blue-800 font-semibold px-3 md:p-0   transition-colors md:px-2 rounded-md"
+                      aria-current="page"
+                    >
+                      Profile
+                    </NavLink>
+                  </li>
+                </>
+              )}
+              {!token && (
+                <li>
+                  <div className="block md:hidden text-center mt-3">
+                    <p className="text-red-500 text-base font-medium">
+                      Please login or create an account
+                    </p>
+                  </div>
+                </li>
+              )}
             </ul>
           </div>
         </div>

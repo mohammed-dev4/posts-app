@@ -5,6 +5,9 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
+import { ToastContainer } from "react-toastify";
+import AuthRoute from "./routes/AuthRoute";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 export default function App() {
   const routes = createBrowserRouter([
@@ -14,19 +17,35 @@ export default function App() {
       children: [
         {
           index: true,
-          element: <Home />,
+          element: (
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/profile",
-          element: <Profile />,
+          element: (
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          ),
         },
         {
           path: "/login",
-          element: <Login />,
+          element: (
+            <AuthRoute>
+              <Login />
+            </AuthRoute>
+          ),
         },
         {
           path: "/register",
-          element: <Register />,
+          element: (
+            <AuthRoute>
+              <Register />
+            </AuthRoute>
+          ),
         },
         {
           path: "*",
@@ -35,5 +54,11 @@ export default function App() {
       ],
     },
   ]);
-  return <RouterProvider router={routes} />;
+
+  return (
+    <>
+      <ToastContainer position="top-center" autoClose={3000} />
+      <RouterProvider router={routes} />;
+    </>
+  );
 }
