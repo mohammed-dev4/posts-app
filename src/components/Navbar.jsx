@@ -6,20 +6,20 @@ import { toast } from "react-toastify";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { pathname } = useLocation();
-  const { token, setToken } = useContext(authContext);
+  const { isLogin, setIsLogin } = useContext(authContext);
   function toggle() {
     setIsOpen(!isOpen);
   }
   function logout() {
-    localStorage.removeItem("token");
-    setToken(null);
+    localStorage.removeItem("isLogin");
+    setIsLogin(null);
     toast.success("Logout successfuly");
   }
 
   return (
     <>
-      <nav className="bg-white w-full  border-b border-gray-300">
-        <div className="container max-w-7xl w-full flex flex-wrap items-center justify-between mx-auto p-4">
+      <nav className="bg-white w-full sticky top-0  border-b border-gray-300">
+        <div className="container max-w-4xl w-full flex flex-wrap items-center justify-between mx-auto py-4">
           {/* Logo */}
           <Link
             href="/"
@@ -35,7 +35,7 @@ export default function Navbar() {
 
           {/* Btn Actions */}
           <div className="flex md:order-2 space-x-2 rtl:space-x-reverse">
-            {token ? (
+            {isLogin ? (
               <button
                 onClick={logout}
                 className="border flex justify-center items-center border-red-600 px-4 py-1 rounded-md bg-red-600 hover:bg-red-800 text-white cursor-pointer   hover:text-white transition-colors "
@@ -79,7 +79,7 @@ export default function Navbar() {
             className={` ${!isOpen && "hidden"} items-center justify-between w-full md:flex md:w-auto md:order-1`}
           >
             <ul className="flex flex-col p-2 border-t border-gray-300 md:p-0 mt-4 font-medium rounded-base bg-neutral-secondary-soft  gap-1.5 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white/40">
-              {token && (
+              {isLogin && (
                 <>
                   <li>
                     <NavLink
@@ -101,7 +101,7 @@ export default function Navbar() {
                   </li>
                 </>
               )}
-              {!token && (
+              {!isLogin && (
                 <li>
                   <div className="block md:hidden text-center mt-3">
                     <p className="text-red-500 text-base font-medium">

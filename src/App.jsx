@@ -58,7 +58,7 @@ export default function App() {
   return (
     <>
       <ToastContainer position="top-center" autoClose={3000} />
-      <RouterProvider router={routes} />;
+      <RouterProvider router={routes} />
     </>
   );
 }
