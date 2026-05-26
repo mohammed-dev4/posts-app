@@ -12,7 +12,7 @@ import authContext from "../../context/authContext/authContext";
 export default function Login() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const { setToken } = useContext(authContext);
+  const { setIsLogin } = useContext(authContext);
 
   const {
     register,
@@ -34,10 +34,10 @@ export default function Login() {
         "https://route-posts.routemisr.com/users/signin",
         formValues,
       );
-       if (data.success) {
+      if (data.success) {
         toast.success(`${data.message} successfuly`);
         localStorage.setItem("token", data.data.token);
-        setToken(data.data.token);
+        setIsLogin(data.data.token);
         navigate("/");
         reset();
       }
