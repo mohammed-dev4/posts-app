@@ -1,11 +1,73 @@
 import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+import { createPost } from "../../server/posts";
 
 export default function CreatePost() {
   const [open, setOpen] = useState(false);
+  const [postData, setPostData] = useState({
+    body: "",
+    image: null,
+  });
+  const [preview, setPreview] = useState(null);
+
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: createPost,
+    onSuccess: () => {
+      toast.success("Post Created Successfully");
+      queryClient.invalidateQueries({
+        queryKey: ["posts"],
+      });
+
+      setPostData({
+        body: "",
+        image: null,
+      });
+      setPreview(null);
+      setOpen(false);
+    },
+    onError: (error) => {
+      toast.error(error.response?.data?.message || "Something went wrong");
+    },
+  });
+
+  function handleChange(e) {
+    const { name, value, files } = e.target;
+
+    if (name === "image") {
+      const file = files[0];
+
+      setPostData({
+        ...postData,
+        image: file,
+      });
+
+      if (file) {
+        setPreview(URL.createObjectURL(file));
+      }
+    } else {
+      setPostData({
+        ...postData,
+        [name]: value,
+      });
+    }
+  }
 
   function handleCreatePost(e) {
     e.preventDefault();
+    mutate(postData);
   }
+
+  function removeImage() {
+    setPreview(null);
+    setPostData({
+      ...postData,
+      image: null,
+    });
+  }
+
   return (
     <div className="container mx-auto mt-4 max-w-2xl">
       {/* Create Post Box */}
@@ -26,7 +88,7 @@ export default function CreatePost() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="w-full max-w-lg rounded-2xl bg-white shadow-xl">
             {/* Header */}
-            <div className="flex items-center justify-between border-b  border-gray-300 p-4">
+            <div className="flex items-center justify-between border-b border-gray-300 p-4">
               <h2 className="text-lg font-semibold text-gray-800">
                 Create Post
               </h2>
@@ -41,27 +103,36 @@ export default function CreatePost() {
 
             {/* Form */}
             <form onSubmit={handleCreatePost} className="p-4">
+              {/* Textarea */}
               <textarea
                 rows="5"
+                name="body"
+                value={postData.body}
+                onChange={handleChange}
                 placeholder="What's on your mind?"
                 className="w-full resize-none border-none text-lg outline-none placeholder:text-gray-400"
               ></textarea>
 
-              <div className="relative w-fit mt-4 overflow-hidden rounded-xl border">
-                <img
-                  src="https://pub-3cba56bacf9f4965bbb0989e07dada12.r2.dev/linked-posts/1779802242016-153f2afc-c626-4211-92ba-033c43fc343b-photo_2023-02-11_04-47-25.webp"
-                  alt="preview"
-                  className=" h-50 w-50 object-cover"
-                />
+              {/* Preview Image */}
+              {preview && (
+                <div className="relative mt-4 w-fit overflow-hidden rounded-xl border">
+                  <img
+                    src={preview}
+                    alt="preview"
+                    className="h-52 w-52 object-cover"
+                  />
 
-                <button
-                  type="button"
-                  className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-white"
-                >
-                  ✕
-                </button>
-              </div>
+                  <button
+                    type="button"
+                    onClick={removeImage}
+                    className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-black/60 text-white"
+                  >
+                    ✕
+                  </button>
+                </div>
+              )}
 
+              {/* Upload Image */}
               <label className="mt-4 flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-gray-300 p-4 transition hover:bg-gray-50">
                 <i className="fa-regular fa-image text-xl text-green-600"></i>
 
@@ -69,15 +140,22 @@ export default function CreatePost() {
                   Add Photo
                 </span>
 
-                <input type="file" hidden accept="image/*" />
+                <input
+                  type="file"
+                  hidden
+                  accept="image/*"
+                  name="image"
+                  onChange={handleChange}
+                />
               </label>
 
               {/* Submit */}
               <button
                 type="submit"
+                disabled={isPending || !postData.body.trim()}
                 className="mt-5 h-11 w-full rounded-xl bg-blue-600 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-blue-300"
               >
-                Create Post
+                {isPending ? "Creating..." : "Create Post"}
               </button>
             </form>
           </div>
