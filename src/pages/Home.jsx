@@ -10,7 +10,7 @@ export default function Home() {
   });
 
   return (
-    <>
+    <div className="container mx-auto mt-4 max-w-2xl">
       <CreatePost />
       {isLoading ? (
         <Loading />
@@ -19,6 +19,6 @@ export default function Home() {
           <PostCard key={post._id} post={post} />
         ))
       )}
-    </>
+    </div>
   );
 }

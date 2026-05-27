@@ -25,10 +25,10 @@ export default function Navbar() {
             href="/"
             className="flex items-center space-x-3 rtl:space-x-reverse"
           >
-            <span className="font-bold text-xl font-serif">
+            <span className="font-bold text-gray-700 text-xl font-serif">
               <span className="text-blue-600 font-extrabold text-2xl">
-                Posts
-              </span>{" "}
+                Posts {""}
+              </span>
               App
             </span>
           </Link>
@@ -78,7 +78,7 @@ export default function Navbar() {
           <div
             className={` ${!isOpen && "hidden"} items-center justify-between w-full md:flex md:w-auto md:order-1`}
           >
-            <ul className="flex flex-col p-2 border-t border-gray-300 md:p-0 mt-4 font-medium rounded-base bg-neutral-secondary-soft  gap-1.5 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white/40">
+            <ul className="flex text-gray-700 flex-col p-2 border-t border-gray-300 md:p-0 mt-4 font-medium rounded-base bg-neutral-secondary-soft  gap-1.5 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white/40">
               {isLogin && (
                 <>
                   <li>

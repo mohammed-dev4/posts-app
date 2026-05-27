@@ -1,6 +1,6 @@
 export default function PostCard({ post }) {
   return (
-    <div className="mx-auto max-w-2xl rounded-xl border mt-4 border-gray-200 bg-white shadow-sm">
+    <div className="rounded-xl border mt-4 border-gray-200 bg-white shadow-sm">
       {/* Header */}
       <div className="flex items-center justify-between p-4">
         <div className="flex items-center gap-3">
@@ -17,7 +17,7 @@ export default function PostCard({ post }) {
           )}
 
           <div>
-            <h2 className="text-sm font-semibold text-gray-900">
+            <h2 className="text-sm font-semibold text-gray-700">
               {post.user.name}
             </h2>
 

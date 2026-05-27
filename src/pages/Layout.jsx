@@ -5,7 +5,7 @@ export default function Layout() {
   return (
     <>
       <Navbar />
-      <div className="container max-w-4xl">
+      <div>
         <Outlet />
       </div>
     </>

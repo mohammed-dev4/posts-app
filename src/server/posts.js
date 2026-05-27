@@ -7,6 +7,7 @@ export async function getPosts() {
     },
   });
 }
+
 export async function createPost(data) {
   const formData = new FormData();
 
