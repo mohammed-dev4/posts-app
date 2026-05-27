@@ -9,6 +9,7 @@ export default function CreatePost() {
     body: "",
     image: null,
   });
+
   const [preview, setPreview] = useState(null);
 
   const queryClient = useQueryClient();
@@ -69,8 +70,7 @@ export default function CreatePost() {
   }
 
   return (
-    <div className="container mx-auto mt-4 max-w-2xl">
-      {/* Create Post Box */}
+    <div>
       <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
         <div className="flex items-center gap-3">
           <input
@@ -83,7 +83,6 @@ export default function CreatePost() {
         </div>
       </div>
 
-      {/* Modal */}
       {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
           <div className="w-full max-w-lg rounded-2xl bg-white shadow-xl">
@@ -101,9 +100,7 @@ export default function CreatePost() {
               </button>
             </div>
 
-            {/* Form */}
             <form onSubmit={handleCreatePost} className="p-4">
-              {/* Textarea */}
               <textarea
                 rows="5"
                 name="body"
@@ -113,7 +110,6 @@ export default function CreatePost() {
                 className="w-full resize-none border-none text-lg outline-none placeholder:text-gray-400"
               ></textarea>
 
-              {/* Preview Image */}
               {preview && (
                 <div className="relative mt-4 w-fit overflow-hidden rounded-xl border">
                   <img
@@ -132,7 +128,6 @@ export default function CreatePost() {
                 </div>
               )}
 
-              {/* Upload Image */}
               <label className="mt-4 flex cursor-pointer items-center justify-center gap-2 rounded-xl border border-dashed border-gray-300 p-4 transition hover:bg-gray-50">
                 <i className="fa-regular fa-image text-xl text-green-600"></i>
 
@@ -149,7 +144,6 @@ export default function CreatePost() {
                 />
               </label>
 
-              {/* Submit */}
               <button
                 type="submit"
                 disabled={isPending || !postData.body.trim()}
