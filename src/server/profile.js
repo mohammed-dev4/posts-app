@@ -33,3 +33,21 @@ export async function changePassword(data) {
     },
   );
 }
+
+export async function changeProfilePhoto(profilePhoto) {
+  const formData = new FormData();
+
+  if (profilePhoto) {
+    formData.append("photo", profilePhoto);
+  }
+
+  return await axios.put(
+    "https://route-posts.routemisr.com/users/upload-photo",
+    formData,
+    {
+      headers: {
+        token: localStorage.getItem("token"),
+      },
+    },
+  );
+}

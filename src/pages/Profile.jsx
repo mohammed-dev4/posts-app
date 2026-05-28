@@ -7,7 +7,6 @@ import PostCard from "../components/posts/PostCard";
 import Loading from "../components/Loading";
 export default function Profile() {
   const { userId } = useContext(authContext);
-
   const { data, isLoading } = useQuery({
     queryKey: ["getUserPosts"],
     queryFn: () => getUserPosts(userId),
