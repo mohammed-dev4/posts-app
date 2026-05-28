@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import InputError from "../InputError";
 import { useMutation } from "@tanstack/react-query";
 import { changePassword } from "../../server/profile";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import authContext from "../../context/authContext/authContext";
 import { toast } from "react-toastify";
 
@@ -41,21 +41,22 @@ export default function ChangePassword({ setIsChangePass }) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: { password: "", newPassword: "" },
     resolver: zodResolver(ChangePasswordSchema),
   });
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: changePassword,
 
     onSuccess: (data) => {
-      console.log(data.data.data.token);
       localStorage.setItem("token", data.data.data.token);
       setIsLogin(data.data.data.token);
       toast.success(data.data.message);
       setIsChangePass(false);
+      reset();
     },
 
     onError: (error) => {
@@ -65,12 +66,20 @@ export default function ChangePassword({ setIsChangePass }) {
   });
 
   async function handleChangePass(data) {
-    // console.log("handleChangePass", data);
     mutate(data);
   }
 
+  useEffect(() => {
+    // Remove Scroll from page On Modal is open
+    document.body.style.overflow = "hidden";
+    return () => {
+      // Add Scroll On page On Modal is Closed
+      document.body.style.overflow = "auto";
+    };
+  }, []);
+
   return (
-    <div className="absolute z-500 w-full h-full inset-0 bg-gray-900/50">
+    <div className="absolute  z-500 w-full h-full inset-0 bg-gray-900/50">
       <div className="flex justify-center items-center h-full w-full">
         <div className="max-w-xl relative w-full bg-white p-3 rounded-xl">
           <span
@@ -137,9 +146,10 @@ export default function ChangePassword({ setIsChangePass }) {
             <div className="mt-4">
               <button
                 type="submit"
-                className="text-white text-base cursor-pointer bg-blue-600 box-border border border-transparent hover:bg-blue-700 focus:ring-4 shadow-xs font-medium leading-5 rounded-base px-8 py-2.5 focus:outline-none rounded-lg mx-auto block"
+                disabled={isPending}
+                className="text-white text-base cursor-pointer bg-blue-600 box-border border border-transparent hover:bg-blue-700 focus:ring-4 shadow-xs font-medium leading-5 rounded-base px-8 py-2.5 focus:outline-none rounded-lg mx-auto block disabled:cursor-not-allowed disabled:bg-blue-300"
               >
-                Change Password
+                {isPending ? "changing..." : "Change Password"}
               </button>
             </div>
           </form>

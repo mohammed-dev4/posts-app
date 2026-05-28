@@ -3,11 +3,14 @@ import { getProfileData } from "../../server/profile";
 import { useContext, useState } from "react";
 import authContext from "../../context/authContext/authContext";
 import ChangePassword from "./ChangePassword";
+import ChangePhoto from "./ChangePhoto";
 
 export default function UserCardProfile() {
   const { setUserId } = useContext(authContext);
 
   const [isChangePass, setIsChangePass] = useState(false);
+  const [isChangePhoto, setIsChangePhoto] = useState(false);
+
   const { data, isSuccess } = useQuery({
     queryKey: ["userCardProfile"],
     queryFn: getProfileData,
@@ -24,6 +27,7 @@ export default function UserCardProfile() {
       {user && (
         <>
           {isChangePass && <ChangePassword setIsChangePass={setIsChangePass} />}
+          {isChangePhoto && <ChangePhoto setIsChangePhoto={setIsChangePhoto} />}
           <div className="flex items-center justify-center">
             <div className="w-full text-gray-600 rounded-[40px] border-2 border-gray-300 p-3 md:p-5 overflow-hidden">
               <div className="flex flex-col sm:flex-row justify-between gap-4">
@@ -36,7 +40,12 @@ export default function UserCardProfile() {
                         className="w-full h-full object-cover"
                       />
                     </div>
-                    <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gray-700 hover:bg-gray-600 text-white text-xs px-3 py-1 rounded-full cursor-pointer transition">
+                    <span
+                      onClick={() => {
+                        setIsChangePhoto(true);
+                      }}
+                      className="absolute -bottom-4 left-1/2 -translate-x-1/2 whitespace-nowrap bg-gray-700 hover:bg-gray-600 text-white text-xs px-3 py-1 rounded-full cursor-pointer transition"
+                    >
                       change photo
                     </span>
                   </div>
