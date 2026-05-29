@@ -7,13 +7,15 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const { pathname } = useLocation();
   const { isLogin, setIsLogin } = useContext(authContext);
+
   function toggle() {
     setIsOpen(!isOpen);
   }
+
   function logout() {
-    localStorage.removeItem("isLogin");
+    localStorage.removeItem("token");
     setIsLogin(null);
-    toast.success("Logout successfuly");
+    toast.success("Logout successfully");
   }
 
   return (

@@ -8,6 +8,36 @@ export async function getPosts() {
   });
 }
 
+export async function getSinglePost(postId) {
+  return await axios.get(`https://route-posts.routemisr.com/posts/${postId}`, {
+    headers: {
+      token: localStorage.getItem("token"),
+    },
+  });
+}
+
+export async function getPostLikes(postId) {
+  return await axios.get(
+    `https://route-posts.routemisr.com/posts/${postId}/likes`,
+    {
+      headers: {
+        token: localStorage.getItem("token"),
+      },
+    },
+  );
+}
+
+export async function getPostComments(postId) {
+  return await axios.get(
+    `https://route-posts.routemisr.com/posts/${postId}/comments`,
+    {
+      headers: {
+        token: localStorage.getItem("token"),
+      },
+    },
+  );
+}
+
 export async function createPost(data) {
   const formData = new FormData();
 
@@ -22,4 +52,31 @@ export async function createPost(data) {
       token: localStorage.getItem("token"),
     },
   });
+}
+
+export async function likeOnPost(postId) {
+  return await axios.put(
+    `https://route-posts.routemisr.com/posts/${postId}/like`,
+    {},
+    {
+      headers: {
+        token: localStorage.getItem("token"),
+      },
+    },
+  );
+}
+export async function commentOnPost(postId, content) {
+  const formData = new FormData();
+
+  formData.append("content", content);
+
+  return await axios.post(
+    `https://route-posts.routemisr.com/posts/${postId}/comments`,
+    formData,
+    {
+      headers: {
+        token: localStorage.getItem("token"),
+      },
+    },
+  );
 }

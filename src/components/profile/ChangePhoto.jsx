@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import { changeProfilePhoto } from "../../server/profile";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
-
 export default function ChangePhoto({ setIsChangePhoto }) {
   const [preview, setPreview] = useState(null);
   const [profilePhoto, setProfilePhoto] = useState(null);
-
   const queryClient = useQueryClient();
   function handlePreview(e) {
     const { files } = e.target;
@@ -15,7 +13,6 @@ export default function ChangePhoto({ setIsChangePhoto }) {
       setPreview(URL.createObjectURL(files[0]));
     }
   }
-
   const { mutate, isPending } = useMutation({
     mutationKey: "changeProfilePhoto",
     mutationFn: changeProfilePhoto,
@@ -38,11 +35,9 @@ export default function ChangePhoto({ setIsChangePhoto }) {
       mutate(profilePhoto);
     }
   }
-
   function removeImage() {
     setPreview(null);
   }
-
   useEffect(() => {
     // Remove Scroll from page On Modal is open
     document.body.style.overflow = "hidden";
@@ -51,7 +46,6 @@ export default function ChangePhoto({ setIsChangePhoto }) {
       document.body.style.overflow = "auto";
     };
   }, []);
-
   return (
     <div className="absolute  z-500 w-full h-full inset-0 bg-gray-900/50">
       <div className="flex justify-center items-center mx-auto h-full w-full">
@@ -64,10 +58,8 @@ export default function ChangePhoto({ setIsChangePhoto }) {
           >
             <i className="fa-solid fa-xmark"></i>
           </span>
-
           <h2 className="text-2xl text-center mb-3">Change Profile Photo</h2>
-
-          <label
+          <label 
             htmlFor="upLoadPhoto"
             className=" flex justify-center items-center"
           >

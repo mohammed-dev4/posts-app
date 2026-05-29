@@ -1,11 +1,48 @@
-import { useContext } from "react";
-import PostAction from "./postAction/PostAction";
-import authContext from "../../context/authContext/authContext";
-import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { NavLink, Outlet, useParams } from "react-router-dom";
+import { getSinglePost } from "../server/posts";
+import Loading from "../components/Loading";
 
-export default function PostCard({ post }) {
-  const { userId } = useContext(authContext);
+export default function PostDetails() {
+  const { postId } = useParams();
 
+  const { data, isLoading } = useQuery({
+    queryKey: [`singlePost-${postId}`],
+    queryFn: () => getSinglePost(postId),
+  });
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-6">
+      <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4">
+        {isLoading ? <Loading /> : <Card post={data.data.data.post} />}
+        <div className="overflow-hidden rounded-2xl border border-gray-200 bg-gray-100 shadow-sm">
+          <div className="flex items-center py-3 border-b gap-2 border-gray-100">
+            <NavLink
+              to={"likes"}
+              className="post-nav py-2 relative flex-1 px-2 text-sm font-semibold  text-gray-500 transition  hover:bg-gray-50 hover:text-gray-700 text-center block rounded-xl"
+            >
+              Likes
+            </NavLink>
+
+            <NavLink
+              className="post-nav py-2 relative flex-1 px-2 text-sm font-semibold  text-gray-500 transition  hover:bg-gray-50 hover:text-gray-700 text-center block rounded-xl"
+              to={"comments"}
+            >
+              Comments
+            </NavLink>
+          </div>
+
+          <div className="p-4">
+            {/* Likes List */}
+            <Outlet />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Card({ post }) {
   return (
     <div className="rounded-xl border mt-4 border-gray-200 bg-white shadow-sm">
       {/* Header */}
@@ -58,38 +95,27 @@ export default function PostCard({ post }) {
 
       {/* Post Image */}
       {post.image && (
-        <Link to={`/post/${post._id}/comments`}>
-          <img
-            src={post.image}
-            alt={post.body}
-            className="max-h-100 w-full object-cover"
-          />
-        </Link>
+        <img
+          src={post.image}
+          alt={post.body}
+          className="max-h-100 w-full object-cover"
+        />
       )}
 
       {/* Stats */}
       <div className="flex items-center justify-between px-4 py-3 text-sm text-gray-500">
         <div className="flex items-center gap-2">
-          <Link
-            to={`/post/${post._id}/likes`}
-            className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-[10px] text-white"
-          >
+          <div className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-[10px] text-white">
             <i className="fa-solid fa-thumbs-up"></i>
-          </Link>
+          </div>
 
           <span>{post.likesCount}</span>
         </div>
 
-        <Link
-          to={`/post/${post._id}/comments`}
-          className="flex items-center gap-3"
-        >
+        <div className="flex items-center gap-3">
           <span>{post.commentsCount} comments</span>
-        </Link>
+        </div>
       </div>
-
-      {/* Actions */}
-      <PostAction postId={post._id} isLiked={post.likes.includes(userId)} />
     </div>
   );
 }

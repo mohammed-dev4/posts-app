@@ -10,6 +10,9 @@ import AuthRoute from "./routes/AuthRoute";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AuthContextProvider from "./context/authContext/AuthContextProvider.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import PostDetails from "./pages/PostDetails.jsx";
+import PostLikes from "./components/posts/postDetails/PostLikes.jsx";
+import PostComments from "./components/posts/postDetails/PostComments.jsx";
 export default function App() {
   const routes = createBrowserRouter([
     {
@@ -31,6 +34,18 @@ export default function App() {
               <Profile />
             </ProtectedRoute>
           ),
+        },
+        {
+          path: "/post/:postId",
+          element: (
+            <ProtectedRoute>
+              <PostDetails />
+            </ProtectedRoute>
+          ),
+          children: [
+            { path: "likes", element: <PostLikes /> },
+            { path: "comments", element: <PostComments /> },
+          ],
         },
         {
           path: "/login",
