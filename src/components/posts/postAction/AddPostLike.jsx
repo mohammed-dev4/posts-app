@@ -13,8 +13,15 @@ export default function AddPostLike({ postId, isLiked }) {
       queryClient.invalidateQueries({
         queryKey: ["posts"],
       });
+
       queryClient.invalidateQueries({
-        queryKey: ["postDetails"],
+        queryKey: ["getUserPosts"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`singlePost-${postId}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`postLikes/${postId}`],
       });
     },
     onError: (error) => {

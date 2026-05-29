@@ -43,7 +43,7 @@ export default function Profile() {
             </div>
           </>
         ) : (
-          posts.map((post) => <PostCard key={post._id} post={post} />)
+          posts.map((post) => <PostCard key={post._id} post={post} is />)
         )}
       </div>
     </div>
