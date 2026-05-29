@@ -12,6 +12,12 @@ export default function Profile() {
     queryFn: () => getUserPosts(userId),
   });
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  const posts = data?.data?.data?.posts || [];
+
   return (
     <div className="container  mx-auto mt-4 max-w-2xl">
       <div className="text-center py-2 font-serif text-gray-700 ">
@@ -19,13 +25,7 @@ export default function Profile() {
       </div>
       <UserCardProfile />
       <div className="mt-3">
-        {isLoading ? (
-          <Loading />
-        ) : data?.data?.data?.posts ? (
-          data?.data?.data?.posts.map((post) => (
-            <PostCard key={post._id} post={post} />
-          ))
-        ) : (
+        {posts.length == 0 ? (
           <>
             <div>
               <div className="flex items-center justify-center py-6">
@@ -42,6 +42,8 @@ export default function Profile() {
               </div>
             </div>
           </>
+        ) : (
+          posts.map((post) => <PostCard key={post._id} post={post} />)
         )}
       </div>
     </div>
