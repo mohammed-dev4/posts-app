@@ -2,6 +2,7 @@ import { useContext } from "react";
 import PostAction from "./postAction/PostAction";
 import authContext from "../../context/authContext/authContext";
 import { Link } from "react-router-dom";
+import PostMenu from "./PostMenu";
 
 export default function PostCard({ post }) {
   const { userId } = useContext(authContext);
@@ -46,9 +47,8 @@ export default function PostCard({ post }) {
           </div>
         </div>
 
-        <button className="rounded-full p-2 transition hover:bg-gray-100">
-          <i className="fa-solid fa-ellipsis text-gray-600"></i>
-        </button>
+        {/* Post Action */}
+        {userId == post.user._id && <PostMenu postId={post._id} />}
       </div>
 
       {/* Post Text */}

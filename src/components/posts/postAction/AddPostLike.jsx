@@ -5,10 +5,12 @@ import { toast } from "react-toastify";
 export default function AddPostLike({ postId, isLiked }) {
   const queryClient = useQueryClient();
   const [isLike, setIsLike] = useState(isLiked);
-  const { mutate } = useMutation({
+  const { mutate, data } = useMutation({
     mutationKey: ["likeOnPost"],
     mutationFn: likeOnPost,
     onSuccess: (data) => {
+      console.log(data.data.data.liked);
+
       setIsLike(data.data.data.liked);
       queryClient.invalidateQueries({
         queryKey: ["posts"],
@@ -42,7 +44,7 @@ export default function AddPostLike({ postId, isLiked }) {
         className={`flex items-center justify-center gap-2 rounded-lg py-2 text-sm font-medium text-gray-600 transition hover:bg-gray-100`}
       >
         <i
-          className={`fa-${isLike ? "solid text-blue-600" : "regular"} text-base fa-thumbs-up`}
+          className={`fa-${isLiked || isLike ? "solid text-blue-600" : "regular"} text-base fa-thumbs-up`}
         ></i>
         Like
       </button>
