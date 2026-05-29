@@ -15,6 +15,9 @@ export default function PostMenu({ postId }) {
       queryClient.invalidateQueries({
         queryKey: ["posts"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["getUserPosts"],
+      });
       setIsOpen(false);
       toast.success(data.data.message);
     },
