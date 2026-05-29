@@ -26,4 +26,8 @@
   .container {
     @apply mx-auto px-4;
   }
+
+  .post-nav.active {
+    @apply bg-white rounded-xl shadow-sm text-sm block;
+  }
 }

@@ -34,10 +34,12 @@ export default function Login() {
         "https://route-posts.routemisr.com/users/signin",
         formValues,
       );
+
       if (data.success) {
-        toast.success(`${data.message} successfuly`);
+        toast.success(`${data.message} successfully`);
         localStorage.setItem("token", data.data.token);
         setIsLogin(data.data.token);
+        localStorage.setItem("userId", data.data.user._id);
         navigate("/");
         reset();
       }
@@ -52,7 +54,7 @@ export default function Login() {
   }
 
   return (
-    <div className="flex mt-4 justify-center  items-center">
+    <div classNam="flex mt-4 justify-center  items-center">
       <div className="max-w-2xl w-full mx-auto bg-gray-50 p-4 shadow-sm rounded-xl ">
         <h3 className="text-center font-serif">Login</h3>
 
