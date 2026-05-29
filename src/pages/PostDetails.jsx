@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { NavLink, Outlet, useParams } from "react-router-dom";
 import { getSinglePost } from "../server/posts";
 import Loading from "../components/Loading";
+import PostCard from "../components/posts/PostCard";
 
 export default function PostDetails() {
   const { postId } = useParams();
@@ -14,7 +15,7 @@ export default function PostDetails() {
   return (
     <div className="min-h-screen bg-gray-50 py-6">
       <div className="mx-auto flex max-w-5xl flex-col gap-6 px-4">
-        {isLoading ? <Loading /> : <Card post={data.data.data.post} />}
+        {isLoading ? <Loading /> : <PostCard post={data.data.data.post} />}
         <div className="overflow-hidden rounded-2xl border border-gray-200 bg-gray-100 shadow-sm">
           <div className="flex items-center py-3 border-b gap-2 border-gray-100">
             <NavLink

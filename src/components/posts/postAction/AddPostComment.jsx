@@ -10,12 +10,17 @@ export default function AddPostComment({ isComment, postId, setIsComment }) {
     mutationKey: ["addPostComment"],
     mutationFn: ({ postId, content }) => commentOnPost(postId, content),
     onSuccess: (data) => {
-      console.log(data.data);
       toast.success(data.data.message);
       setContent("");
       setIsComment(false);
       queryClient.invalidateQueries({
         queryKey: ["posts"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`singlePost-${postId}`],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [`postComments/${postId}`],
       });
     },
     onError: (error) => {
