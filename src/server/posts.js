@@ -65,6 +65,7 @@ export async function likeOnPost(postId) {
     },
   );
 }
+
 export async function commentOnPost(postId, content) {
   const formData = new FormData();
 
@@ -73,6 +74,28 @@ export async function commentOnPost(postId, content) {
   return await axios.post(
     `https://route-posts.routemisr.com/posts/${postId}/comments`,
     formData,
+    {
+      headers: {
+        token: localStorage.getItem("token"),
+      },
+    },
+  );
+}
+
+export async function deletePost(postId) {
+  return await axios.delete(
+    `https://route-posts.routemisr.com/posts/${postId}`,
+    {
+      headers: {
+        token: localStorage.getItem("token"),
+      },
+    },
+  );
+}
+
+export async function deleteComment(postId, commentId) {
+  return await axios.delete(
+    `https://route-posts.routemisr.com/posts/${postId}/comments/${commentId}`,
     {
       headers: {
         token: localStorage.getItem("token"),
