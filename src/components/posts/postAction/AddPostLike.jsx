@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 export default function AddPostLike({ postId, isLiked }) {
   const queryClient = useQueryClient();
   const [isLike, setIsLike] = useState(isLiked);
-  const { mutate, data } = useMutation({
+  const { mutate } = useMutation({
     mutationKey: ["likeOnPost"],
     mutationFn: likeOnPost,
     onSuccess: (data) => {

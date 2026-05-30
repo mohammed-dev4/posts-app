@@ -54,6 +54,28 @@ export async function createPost(data) {
   });
 }
 
+export async function updatePost(data, postId) {
+  console.log("update fun", data);
+
+  const formData = new FormData();
+
+  formData.append("body", data.body);
+
+  if (data.image) {
+    formData.append("image", data.image);
+  }
+
+  return await axios.put(
+    `https://route-posts.routemisr.com/posts/${postId}`,
+    formData,
+    {
+      headers: {
+        token: localStorage.getItem("token"),
+      },
+    },
+  );
+}
+
 export async function likeOnPost(postId) {
   return await axios.put(
     `https://route-posts.routemisr.com/posts/${postId}/like`,
@@ -96,6 +118,22 @@ export async function deletePost(postId) {
 export async function deleteComment(postId, commentId) {
   return await axios.delete(
     `https://route-posts.routemisr.com/posts/${postId}/comments/${commentId}`,
+    {
+      headers: {
+        token: localStorage.getItem("token"),
+      },
+    },
+  );
+}
+
+export async function updateComment(postId, commentId, content) {
+  const formData = new FormData();
+
+  formData.append("content", content);
+
+  return await axios.put(
+    `https://route-posts.routemisr.com/posts/${postId}/comments/${commentId}`,
+    formData,
     {
       headers: {
         token: localStorage.getItem("token"),

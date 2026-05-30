@@ -48,7 +48,7 @@ export default function PostCard({ post }) {
         </div>
 
         {/* Post Action */}
-        {userId == post.user._id && <PostMenu postId={post._id} />}
+        {userId == post.user._id && <PostMenu postId={post._id} post={post} />}
       </div>
 
       {/* Post Text */}
