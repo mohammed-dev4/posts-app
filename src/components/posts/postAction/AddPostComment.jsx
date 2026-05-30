@@ -17,6 +17,9 @@ export default function AddPostComment({ isComment, postId, setIsComment }) {
         queryKey: ["posts"],
       });
       queryClient.invalidateQueries({
+        queryKey: ["getUserPosts"],
+      });
+      queryClient.invalidateQueries({
         queryKey: [`singlePost-${postId}`],
       });
       queryClient.invalidateQueries({

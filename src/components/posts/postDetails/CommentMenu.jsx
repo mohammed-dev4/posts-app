@@ -3,38 +3,38 @@ import { toast } from "react-toastify";
 import { deleteComment } from "../../../server/posts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export default function CommentMenu({ postId, commentId }) {
+export default function CommentMenu({
+  postId,
+  commentId,
+  setEditingCommentId,
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: ({ postId, commentId }) => {
-      console.log("postId", postId);
-      console.log("commentId", commentId);
+    mutationKey: ["deleteComment"],
 
-      return deleteComment(postId, commentId);
-    },
-    mutationKey: ["deletePost"],
+    mutationFn: () => deleteComment(postId, commentId),
+
     onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: [`postComments/${postId}`],
       });
+
       queryClient.invalidateQueries({
         queryKey: [`singlePost-${postId}`],
       });
+
       setIsOpen(false);
+
       toast.success(data.data.message);
     },
+
     onError: (error) => {
-      console.log(error.response.data);
       toast.error(error?.response?.data?.message || "Something went wrong");
     },
   });
-
-  function handleDeleteComment() {
-    mutate({ postId, commentId });
-  }
 
   return (
     <div className="relative">
@@ -46,9 +46,10 @@ export default function CommentMenu({ postId, commentId }) {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 top-10 z-100 w-40 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg">
+        <div className="absolute right-0 top-10 z-50 w-40 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg">
           <button
             onClick={() => {
+              setEditingCommentId(commentId);
               setIsOpen(false);
             }}
             className="flex w-full items-center gap-2 px-4 py-3 text-sm text-gray-700 transition hover:bg-gray-100"
@@ -58,12 +59,13 @@ export default function CommentMenu({ postId, commentId }) {
           </button>
 
           <button
-            onClick={handleDeleteComment}
+            onClick={() => mutate()}
             disabled={isPending}
-            className="flex cursor-pointer w-full items-center gap-2 px-4 py-3 text-sm text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:text-red-300 "
+            className="flex w-full cursor-pointer items-center gap-2 px-4 py-3 text-sm text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:text-red-300"
           >
             <i className="fa-regular fa-trash-can"></i>
-            {isPending ? "deleting..." : "Delete"}
+
+            {isPending ? "Deleting..." : "Delete"}
           </button>
         </div>
       )}
